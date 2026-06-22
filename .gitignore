@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+*.so
+.Python
+venv/
+.venv/
+env/
+
+# Flask / App
+instance/
+*.db
+*.sqlite3
+.env
+backend/.env
+
+# ML models (large binary files — download/train separately)
+backend/saved_models/distilbert_finetuned/
+backend/saved_models/*.pkl
+backend/saved_models/*.pt
+
+# Dataset (download separately from Kaggle)
+backend/data/
+
+# Node
+node_modules/
+frontend/dist/
+frontend/.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Test cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Docker
+.dockerignore
