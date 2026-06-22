@@ -1,0 +1,109 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg: #0f1117;
+  --color-surface: #1a1d27;
+  --color-surface-alt: #21253a;
+  --color-border: #2e3249;
+  --color-primary: #4f8ef7;
+  --color-primary-dark: #3a7ae8;
+  --color-real: #22c55e;
+  --color-real-bg: #052e16;
+  --color-fake: #ef4444;
+  --color-fake-bg: #2d0a0a;
+  --color-warn: #f59e0b;
+  --color-text: #e2e8f0;
+  --color-text-muted: #94a3b8;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-surface); }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+
+/* Utility */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.badge-real {
+  background: var(--color-real-bg);
+  color: var(--color-real);
+  border: 1px solid var(--color-real);
+}
+
+.badge-fake {
+  background: var(--color-fake-bg);
+  color: var(--color-fake);
+  border: 1px solid var(--color-fake);
+}
+
+.badge-warn {
+  background: #2d1a00;
+  color: var(--color-warn);
+  border: 1px solid var(--color-warn);
+}
