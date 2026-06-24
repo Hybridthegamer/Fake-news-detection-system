@@ -125,12 +125,17 @@ The system adopts a **three-tier client-server architecture** as specified in th
 
 ## System Requirements
 
+> **Python version note:** Python **3.11 or 3.12** is strongly recommended. Python 3.14 is supported but requires `spacy>=3.8.0` (pre-built wheels for 3.14 are only available in that release line). If you hit Cython/build errors, the fastest fix is to create a fresh virtual environment with Python 3.11 or 3.12.
+>
+> Check your version with: `python --version`
+> Install Python 3.11: https://www.python.org/downloads/release/python-3119/
+
 ### Minimum (Development / CPU-only inference)
 
 | Component | Requirement |
 |-----------|------------|
 | OS | Linux, macOS, or Windows (WSL2 recommended) |
-| Python | 3.10 or 3.11 |
+| Python | **3.11 or 3.12** (recommended); 3.13/3.14 supported with `spacy>=3.8` |
 | Node.js | 18 LTS or 20 LTS |
 | RAM | 4 GB (8 GB recommended for DistilBERT loading) |
 | Disk | 4 GB free (models + dependencies) |
@@ -174,6 +179,11 @@ source venv/bin/activate          # Linux / macOS
 
 # Install Python dependencies
 pip install -r requirements.txt
+
+# If the above fails on Windows with Cython/build errors, install PyTorch
+# manually first using the official selector (choose your OS, CUDA version):
+#   https://pytorch.org/get-started/locally/
+# Then re-run: pip install -r requirements.txt
 
 # Download spaCy language model
 python -m spacy download en_core_web_sm
