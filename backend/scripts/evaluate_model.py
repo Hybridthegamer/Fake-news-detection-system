@@ -139,11 +139,12 @@ def main():
     else:
         df['combined'] = df['text'].fillna('')
     df = df[['combined', 'label']].dropna()
+    df['combined'] = df['combined'].astype(object)  # avoid PyArrow on long strings
     df['label'] = df['label'].astype(int)
 
     _, X_test_raw, _, y_test = train_test_split(
-        df['combined'].tolist(), df['label'].tolist(),
-        test_size=args.test_size, random_state=42, stratify=df['label'].tolist()
+        list(df['combined']), list(df['label']),
+        test_size=args.test_size, random_state=42, stratify=list(df['label'])
     )
 
     if args.model in ('all', 'lr'):

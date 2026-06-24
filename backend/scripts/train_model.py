@@ -69,6 +69,8 @@ def load_dataset(path: str) -> pd.DataFrame:
         raise ValueError("Dataset must have a 'text' column.")
 
     df = pd.DataFrame(df[['combined', 'label']].dropna())
+    # Cast to object dtype to avoid PyArrow-backed strings failing on long texts
+    df['combined'] = df['combined'].astype(object)
     df['label'] = df['label'].astype(int)
 
     real_n = (df['label'] == 0).sum()
@@ -273,8 +275,8 @@ def main() -> None:
         sys.exit(1)
 
     df = load_dataset(dataset_path)
-    X_raw = df['combined'].tolist()
-    y = df['label'].tolist()
+    X_raw = list(df['combined'])   # list() avoids PyArrow ChunkedArray.to_numpy()
+    y = list(df['label'])
 
     X_train_raw, X_test_raw, y_train, y_test = train_test_split(
         X_raw, y, test_size=args.test_size, random_state=42, stratify=y
