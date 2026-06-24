@@ -1,25 +1,28 @@
-flask==3.0.0
-flask-sqlalchemy==3.1.1
-flask-jwt-extended==4.6.0
-flask-cors==4.0.0
-flask-bcrypt==1.0.1
-python-dotenv==1.0.0
-sqlalchemy==2.0.23
+flask>=3.0.0
+flask-sqlalchemy>=3.1.0
+flask-jwt-extended>=4.6.0
+flask-cors>=4.0.0
+flask-bcrypt>=1.0.1
+python-dotenv>=1.0.0
+sqlalchemy>=2.0.0
 
 # NLP
-nltk==3.8.1
-spacy==3.7.2
-scikit-learn==1.3.2
+nltk>=3.8.1
+# spaCy 3.8+ ships pre-built wheels for Python 3.12/3.13/3.14 on Windows
+spacy>=3.8.0
+scikit-learn>=1.4.0
 
 # Deep Learning
-torch==2.1.2
-transformers==4.36.2
-datasets==2.15.0
+# PyTorch: if the line below fails on your platform, install manually first:
+#   https://pytorch.org/get-started/locally/
+torch>=2.3.0
+transformers>=4.40.0
+datasets>=2.20.0
 
 # Explainability
-lime==0.2.0.1
+lime>=0.2.0.1
 
 # Data handling
-pandas==2.1.4
-numpy==1.26.2
-tqdm==4.66.1
+pandas>=2.1.0
+numpy>=1.26.0
+tqdm>=4.66.0
