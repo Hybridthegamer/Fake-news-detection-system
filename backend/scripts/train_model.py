@@ -68,7 +68,7 @@ def load_dataset(path: str) -> pd.DataFrame:
     else:
         raise ValueError("Dataset must have a 'text' column.")
 
-    df = df[['combined', 'label']].dropna()
+    df = pd.DataFrame(df[['combined', 'label']].dropna())
     df['label'] = df['label'].astype(int)
 
     real_n = (df['label'] == 0).sum()
