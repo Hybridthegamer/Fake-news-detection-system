@@ -128,7 +128,7 @@ def train_lr_tfidf(
 
     logger.info("Saved TF-IDF vectorizer → %s", TFIDF_PATH)
     logger.info("Saved LR classifier    → %s", LR_PATH)
-    return acc, f1
+    return float(acc), float(f1)
 
 
 # ------------------------------------------------------------------ #
@@ -163,7 +163,7 @@ def train_distilbert(
     model = DistilBertForSequenceClassification.from_pretrained(
         'distilbert-base-uncased', num_labels=2
     )
-    model.to(device)
+    model.to(device)  # type: ignore[arg-type]  # transformers 5.x stubs mistype Module.to()
 
     class _NewsDataset(Dataset):
         def __init__(self, texts, labels):
@@ -241,7 +241,7 @@ def train_distilbert(
         "DistilBERT — Best Val Accuracy: %.4f  |  F1: %.4f", best_acc, best_f1
     )
     logger.info("\n%s", classification_report(final_labels, final_preds, target_names=['Real', 'Fake']))
-    return best_acc, best_f1
+    return float(best_acc), float(best_f1)
 
 
 # ------------------------------------------------------------------ #
