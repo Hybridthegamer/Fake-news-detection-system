@@ -146,7 +146,6 @@ def train_distilbert(
         import torch
         from torch.utils.data import DataLoader, Dataset
         from transformers import (
-            AdamW,
             DistilBertForSequenceClassification,
             DistilBertTokenizerFast,
             get_linear_schedule_with_warmup,
@@ -185,7 +184,7 @@ def train_distilbert(
     train_loader = DataLoader(_NewsDataset(X_train, y_train), batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(_NewsDataset(X_test, y_test), batch_size=batch_size)
 
-    optimizer = AdamW(model.parameters(), lr=2e-5, weight_decay=0.01)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=2e-5, weight_decay=0.01)
     total_steps = len(train_loader) * epochs
     scheduler = get_linear_schedule_with_warmup(
         optimizer,
