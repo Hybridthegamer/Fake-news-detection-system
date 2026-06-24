@@ -38,8 +38,15 @@ class TextPreprocessor:
 
     def __init__(self) -> None:
         try:
-            self._nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])
-            logger.info("spaCy en_core_web_sm loaded.")
+            # Disable all neural components — we only need the lookup-based
+            # lemmatizer and tokenizer. tok2vec/tagger trigger heavy Cython
+            # allocations on large texts that can fail on Windows.
+            self._nlp = spacy.load(
+                'en_core_web_sm',
+                disable=['tok2vec', 'tagger', 'parser', 'ner', 'senter'],
+            )
+            self._nlp.max_length = 2_000_000  # handle long articles
+            logger.info("spaCy en_core_web_sm loaded (lemmatizer only).")
         except OSError:
             raise RuntimeError(
                 "spaCy model 'en_core_web_sm' not found. "
