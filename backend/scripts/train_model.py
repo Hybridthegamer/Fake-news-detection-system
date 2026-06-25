@@ -99,11 +99,13 @@ def train_lr_tfidf(
     y_train: list[int],
     X_test_clean: list[str],
     y_test: list[int],
+    max_features: int = 30_000,
 ) -> tuple[float, float]:
     logger.info("=== Training TF-IDF + Logistic Regression ===")
+    logger.info("TF-IDF max_features=%d", max_features)
 
     vectorizer = TfidfVectorizer(
-        max_features=50_000,
+        max_features=max_features,
         ngram_range=(1, 2),
         sublinear_tf=True,
     )
@@ -261,6 +263,10 @@ def main() -> None:
     parser.add_argument('--test-size', type=float, default=0.2, help='Test split ratio')
     parser.add_argument('--epochs', type=int, default=4, help='DistilBERT fine-tuning epochs')
     parser.add_argument('--batch-size', type=int, default=16, help='DistilBERT batch size')
+    parser.add_argument(
+        '--max-features', type=int, default=30_000,
+        help='TF-IDF max vocabulary size (default: 30000; reduce if you hit memory errors)',
+    )
     args = parser.parse_args()
 
     dataset_path = args.dataset
@@ -286,7 +292,8 @@ def main() -> None:
         preprocessor = TextPreprocessor()
         X_train_clean = preprocess_corpus(X_train_raw, preprocessor)
         X_test_clean = preprocess_corpus(X_test_raw, preprocessor)
-        train_lr_tfidf(X_train_clean, y_train, X_test_clean, y_test)
+        train_lr_tfidf(X_train_clean, y_train, X_test_clean, y_test,
+                       max_features=args.max_features)
 
     if args.model in ('all', 'distilbert'):
         train_distilbert(
