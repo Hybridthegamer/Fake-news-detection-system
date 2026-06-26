@@ -24,6 +24,7 @@ import logging
 import os
 import pickle
 import sys
+from collections import Counter
 
 import numpy as np
 import pandas as pd
@@ -94,6 +95,36 @@ def preprocess_corpus(texts: list[str], preprocessor: TextPreprocessor) -> list[
 # Algorithm 3.3 — TF-IDF + Logistic Regression                        #
 # ------------------------------------------------------------------ #
 
+def _build_vocabulary(
+    texts: list[str],
+    max_features: int,
+    ngram_range: tuple[int, int] = (1, 2),
+) -> dict[str, int]:
+    """
+    Build a vocabulary ranked by document frequency without calling
+    sklearn's _sort_features(), which allocates a contiguous int64 index
+    array whose size equals the number of non-zeros in the sparse matrix
+    (~28 M on WELFake) and cannot be satisfied by Windows on low RAM.
+
+    When TfidfVectorizer receives a pre-built `vocabulary` dict it marks
+    `fixed_vocabulary_ = True` and skips _sort_features entirely.
+    """
+    min_n, max_n = ngram_range
+    doc_freq: Counter = Counter()
+    for doc in texts:
+        tokens = doc.split()
+        seen: set[str] = set()
+        for n in range(min_n, max_n + 1):
+            if n == 1:
+                seen.update(tokens)
+            else:
+                for i in range(len(tokens) - n + 1):
+                    seen.add(' '.join(tokens[i : i + n]))
+        doc_freq.update(seen)
+    top_terms = sorted(term for term, _ in doc_freq.most_common(max_features))
+    return {term: idx for idx, term in enumerate(top_terms)}
+
+
 def train_lr_tfidf(
     X_train_clean: list[str],
     y_train: list[int],
@@ -104,8 +135,14 @@ def train_lr_tfidf(
     logger.info("=== Training TF-IDF + Logistic Regression ===")
     logger.info("TF-IDF max_features=%d", max_features)
 
+    logger.info("Building vocabulary by document frequency...")
+    vocabulary = _build_vocabulary(X_train_clean, max_features, ngram_range=(1, 2))
+    logger.info("Vocabulary size: %d terms", len(vocabulary))
+
+    # Passing vocabulary= causes sklearn to skip _sort_features(), avoiding
+    # a 218 MiB contiguous int64 allocation that Windows cannot satisfy.
     vectorizer = TfidfVectorizer(
-        max_features=max_features,
+        vocabulary=vocabulary,
         ngram_range=(1, 2),
         sublinear_tf=True,
     )
